@@ -16,6 +16,8 @@ public class StandaloneConfig {
         public int updateInterval;
         @JsonProperty("query-server")
         public boolean queryServer;
+        @JsonProperty("default-on-timeout")
+        public boolean defaultOnTimeout;
         @JsonProperty("session-info")
         public SessionInfo sessionInfo;
     }

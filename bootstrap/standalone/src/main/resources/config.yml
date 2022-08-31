@@ -6,6 +6,10 @@ session:
   # Should we query the bedrock server to sync the session information
   query-server: true
 
+  # Should we set the session information back to default if we fail to ping the server
+  # Only useful if querying is enabled
+  default-on-timeout: false
+
   # The data to broadcast over xbox live, this is the default if querying is enabled
   session-info:
     host-name: "Geyser Test Server"

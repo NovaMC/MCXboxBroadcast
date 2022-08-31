@@ -18,6 +18,11 @@ public class SessionInfo {
     public SessionInfo() {
     }
 
+    public SessionInfo(SessionInfo original) {
+        this(original.hostName, original.worldName, original.version, original.protocol,
+                original.players,original.maxPlayers, original.ip, original.port);
+    }
+
     public SessionInfo(String hostName, String worldName, String version, int protocol, int players, int maxPlayers, String ip, int port) {
         this.hostName = hostName;
         this.worldName = worldName;

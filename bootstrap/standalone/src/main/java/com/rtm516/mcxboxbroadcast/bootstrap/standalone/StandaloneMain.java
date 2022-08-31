@@ -69,10 +69,11 @@ public class StandaloneMain {
 
         SessionManager sessionManager = new SessionManager("./cache", logger);
 
-        SessionInfo sessionInfo = config.sessionConfig.sessionInfo;
+        SessionInfo configSessionInfo = config.sessionConfig.sessionInfo;
+        SessionInfo sessionInfo = new SessionInfo(configSessionInfo);
 
         // Sync the session info from the server if needed
-        updateSessionInfo(sessionInfo);
+        updateSessionInfo(sessionInfo, configSessionInfo);
 
         logger.info("Creating session...");
 
@@ -81,7 +82,7 @@ public class StandaloneMain {
         logger.info("Created session!");
 
         scheduledThreadPool.scheduleWithFixedDelay(() -> {
-            updateSessionInfo(sessionInfo);
+            updateSessionInfo(sessionInfo, configSessionInfo);
 
             try {
                 // Make sure the connection is still active
@@ -118,7 +119,7 @@ public class StandaloneMain {
         }
     }
 
-    private static void updateSessionInfo(SessionInfo sessionInfo) {
+    private static void updateSessionInfo(SessionInfo sessionInfo, SessionInfo defaultInfo) {
         if (config.sessionConfig.queryServer) {
             BedrockClient client = null;
             try {
@@ -142,6 +143,17 @@ public class StandaloneMain {
                     logger.error("Timed out while trying to ping server");
                 } else {
                     logger.error("Failed to ping server", e);
+                }
+                // Set session info back to default
+                if (config.sessionConfig.defaultOnTimeout) {
+                    sessionInfo.setHostName(defaultInfo.getHostName());
+                    sessionInfo.setWorldName(defaultInfo.getWorldName());
+                    sessionInfo.setVersion(defaultInfo.getVersion());
+                    sessionInfo.setProtocol(defaultInfo.getProtocol());
+                    sessionInfo.setPlayers(defaultInfo.getPlayers());
+                    sessionInfo.setMaxPlayers(defaultInfo.getMaxPlayers());
+
+                    logger.debug("Set server info back to default");
                 }
             } finally {
                 if (client != null) {
