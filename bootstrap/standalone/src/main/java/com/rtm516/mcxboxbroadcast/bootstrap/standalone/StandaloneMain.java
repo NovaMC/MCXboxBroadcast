@@ -20,10 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class StandaloneMain {
     private static StandaloneConfig config;
@@ -92,7 +89,7 @@ public class StandaloneMain {
 
                 // Update the session
                 sessionManager.updateSession(sessionInfo);
-                logger.info("Updated session!");
+                logger.debug("Updated session!");
             } catch (SessionUpdateException e) {
                 logger.error("Failed to update session", e);
             }
@@ -141,7 +138,11 @@ public class StandaloneMain {
                 sessionInfo.setPlayers(pong.getPlayerCount());
                 sessionInfo.setMaxPlayers(pong.getMaximumPlayerCount());
             } catch (InterruptedException | ExecutionException e) {
-                logger.error("Failed to ping server", e);
+                if (e.getCause() instanceof TimeoutException) {
+                    logger.error("Timed out while trying to ping server");
+                } else {
+                    logger.error("Failed to ping server", e);
+                }
             } finally {
                 if (client != null) {
                     client.close();
