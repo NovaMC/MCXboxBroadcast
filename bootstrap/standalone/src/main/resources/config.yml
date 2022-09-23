@@ -10,6 +10,9 @@ session:
   # Only useful if querying is enabled
   default-on-timeout: false
 
+  # Makes the Sub-MOTD the MOTD and vice-versa
+  swap-motd: false
+
   # The data to broadcast over xbox live, this is the default if querying is enabled
   session-info:
     host-name: "Geyser Test Server"

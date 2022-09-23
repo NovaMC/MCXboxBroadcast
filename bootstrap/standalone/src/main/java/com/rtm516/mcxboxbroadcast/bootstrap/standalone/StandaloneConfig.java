@@ -18,6 +18,8 @@ public class StandaloneConfig {
         public boolean queryServer;
         @JsonProperty("default-on-timeout")
         public boolean defaultOnTimeout;
+        @JsonProperty("swap-motd")
+        public boolean swapMotd;
         @JsonProperty("session-info")
         public SessionInfo sessionInfo;
     }

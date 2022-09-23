@@ -132,8 +132,8 @@ public class StandaloneMain {
                 BedrockPong pong = client.ping(addressToPing, 1500, TimeUnit.MILLISECONDS).get();
 
                 // Update the session information
-                sessionInfo.setHostName(pong.getMotd());
-                sessionInfo.setWorldName(pong.getSubMotd());
+                sessionInfo.setHostName(!config.sessionConfig.swapMotd ? pong.getMotd() : pong.getSubMotd());
+                sessionInfo.setWorldName(!config.sessionConfig.swapMotd ? pong.getSubMotd() : pong.getMotd());
                 sessionInfo.setVersion(pong.getVersion());
                 sessionInfo.setProtocol(pong.getProtocolVersion());
                 sessionInfo.setPlayers(pong.getPlayerCount());
@@ -146,8 +146,8 @@ public class StandaloneMain {
                 }
                 // Set session info back to default
                 if (config.sessionConfig.defaultOnTimeout) {
-                    sessionInfo.setHostName(defaultInfo.getHostName());
-                    sessionInfo.setWorldName(defaultInfo.getWorldName());
+                    sessionInfo.setHostName(!config.sessionConfig.swapMotd ? defaultInfo.getHostName() : defaultInfo.getWorldName());
+                    sessionInfo.setWorldName(!config.sessionConfig.swapMotd ? defaultInfo.getWorldName() : defaultInfo.getHostName());
                     sessionInfo.setVersion(defaultInfo.getVersion());
                     sessionInfo.setProtocol(defaultInfo.getProtocol());
                     sessionInfo.setPlayers(defaultInfo.getPlayers());
